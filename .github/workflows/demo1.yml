@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      script-files: ${{ steps.publ.outputs.something }}
     steps:
       - name: Output event data
         run: echo "${{ toJSON(github.event) }}"
@@ -20,6 +22,9 @@ jobs:
         run: npm run test
       - name: Build code
         run: npm run build
+      - name: publish JS file
+        id: publ
+        run: find dist/assets/*.js -type f -execdir echo 'something={}' >> $GITHUB_OUTPUT ';'
       - name: upload artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -36,6 +41,8 @@ jobs:
           name: dist-files
       - name: output contents
         run: ls
+      - name: output filename
+        run: echo "${{ needs.build.outputs.script-files }}"
       - name: Deploy
         run: echo "Deploying....."
 
