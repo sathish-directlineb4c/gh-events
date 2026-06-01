@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Output event data
@@ -25,6 +25,18 @@ jobs:
         with:
           name: dist-files
           path: dist
-      - name: Deploy project
-        run: echo "Deploying..."
-        #blah blah
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get build atifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: output contents
+        run: ls
+
+
+
+        
