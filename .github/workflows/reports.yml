@@ -1,0 +1,29 @@
+name: reports
+on: 
+  workflow_call:
+    inputs:
+      artifact_name: 
+        description: This is the input
+        required: true
+        type: string
+    outputs:
+      script_out:
+        value: ${{ jobs.get-result.outputs.reportls }}
+
+jobs:
+  get-result:
+    runs-on: ubuntu-latest
+    outputs: 
+      reportls: ${{ steps.abc.outputs.step-result }}
+    steps:
+      - name: download artifacts
+        uses: actions/download-artifact@v4
+        with: 
+          name: ${{inputs.artifact_name}}
+      - name: list atifacts
+        run: ls 
+      - name: echo outpout
+        id: abc
+        run: |
+          echo "step-result=success"  >> $GITHUB_OUTPUT ';'
+          echo "input to the report.yml is ${{ inputs.artifact_name }}"

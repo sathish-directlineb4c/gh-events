@@ -45,7 +45,17 @@ jobs:
         run: echo "${{ needs.build.outputs.script-files }}"
       - name: Deploy
         run: echo "Deploying....."
-
-
-
-        
+  
+  report:
+    needs: build
+    uses: ./.github/workflows/reports.yml
+    with: 
+      artifiact_name: dist-files
+  
+  print:
+    needs: report
+    runs-on: ubuntu-latest
+    steps: 
+      - name: print final output
+        run: |
+          echo "Final output is: ${{ needs.report.outputs.script_out }}"
