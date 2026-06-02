@@ -50,7 +50,7 @@ jobs:
     needs: build
     uses: ./.github/workflows/reports.yml
     with: 
-      artifiact_name: dist-files
+      artifact_name: dist-files
   
   print:
     needs: report
